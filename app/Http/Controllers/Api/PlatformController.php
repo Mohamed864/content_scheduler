@@ -23,7 +23,7 @@ class PlatformController extends Controller
             'post_id' => 'required|exists:posts,id',
             'status' => 'boolean'
         ]);
-
+        //for authentication
         $post = Auth::user()->posts()->findOrFail($request->post_id);
 
         //check if platform is already attached
