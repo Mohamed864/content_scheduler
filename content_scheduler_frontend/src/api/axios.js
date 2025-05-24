@@ -35,8 +35,6 @@ export default instance;
 instance.interceptors.response.use(
     (response) => {
         const { data } = response;
-        console.log(data.data.user);
-        console.log(data.data.token);
         return response;
     },
     (error) => {

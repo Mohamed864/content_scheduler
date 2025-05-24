@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnalyticsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -15,15 +16,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
 
     //post routes
+    Route::get('/posts/filterByStatusAndDate', [PostController::class, 'filterByStatusAndDate']);
     Route::apiResource('posts', PostController::class);
 
     Route::post('posts/{post}/publish',[PostController::class,'publish']);
-    Route::get('posts/filter', [PostController::class, 'filterByStatusAndDate']);
+
 
     //call all available platforms
     Route::get('/platforms',[PlatformController::class,'index']);
     Route::post('platforms/{platform}/toggle', [PlatformController::class, 'toggle']);
 
+    //for analytics
+    Route::get('/analytics',[AnalyticsController::class,'index']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

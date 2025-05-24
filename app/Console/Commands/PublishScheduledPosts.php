@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Post;
 use App\Jobs\PublishPostJob;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class PublishScheduledPosts extends Command
 {
@@ -30,10 +31,14 @@ class PublishScheduledPosts extends Command
      */
     public function handle()
     {
-        $time = $this->option('time') ? Carbon::parse($this->option('time')) : now();
+        Log::info('Starting scheduled posts publication', ['time' => now()]);
 
-        $query = Post::where('status', Post::STATUS_SCHEDULED)
-                    ->where('scheduled_time', '<=', $time);
+        $time = $this->option('time') ? Carbon::parse($this->option('time')) : now();
+        Log::debug('Checking posts scheduled before', ['check_time' => $time]);
+
+        $query = Post::with('platforms')
+                  ->where('status', Post::STATUS_SCHEDULED)
+                  ->where('scheduled_time', '<=', $time);
 
         if ($this->option('pretend')) {
             $posts = $query->get();
@@ -44,12 +49,13 @@ class PublishScheduledPosts extends Command
             }
 
             $this->table(
-                ['ID', 'Title', 'Scheduled Time'],
+                ['ID', 'Title', 'Scheduled Time', 'Platforms'],
                 $posts->map(function ($post) {
                     return [
                         $post->id,
                         $post->title,
-                        $post->scheduled_time->format('Y-m-d H:i:s')
+                        $post->scheduled_time->format('Y-m-d H:i:s'),
+                        $post->platforms->pluck('name')->join(', ')
                     ];
                 })
             );
@@ -66,10 +72,23 @@ class PublishScheduledPosts extends Command
         }
 
         $query->each(function ($post) {
-            dispatch(new PublishPostJob($post));
-            $this->info('Dispatching job for post: '.$post->id.' - '.$post->title);
+            try {
+                dispatch(new PublishPostJob($post));
+                $this->info('Dispatching job for post: '.$post->id.' - '.$post->title);
+                Log::info('Dispatched publish job', ['post_id' => $post->id]);
+            } catch (\Exception $e) {
+                Log::error('Failed to dispatch job for post', [
+                    'post_id' => $post->id,
+                    'error' => $e->getMessage()
+                ]);
+                $this->error('Error dispatching job for post '.$post->id.': '.$e->getMessage());
+            }
         });
 
         $this->info("Dispatched jobs for {$count} scheduled posts");
+        Log::info('Completed scheduled posts publication', [
+            'count' => $count,
+            'time' => now()
+        ]);
     }
 }

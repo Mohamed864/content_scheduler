@@ -39,16 +39,23 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $post = Post::create($request->validated(),['user_id' => auth()->id()])->all();
+        // Merge user_id into validated data
+        $data = array_merge($request->validated(), ['user_id' => auth()->id()]);
 
-            if ($request->has('platform_ids')) {
-        $post->platforms()->attach($request->platform_ids, [
-            'platform_status' => true
-        ]);
-    }
+        // Create the post
+        $post = Post::create($data);
 
+        // Attach platforms if platform_ids exist
+        if ($request->has('platform_ids')) {
+            $post->platforms()->attach($request->platform_ids, [
+                'platform_status' => true
+            ]);
+        }
+
+        // Return post with platforms loaded
         return response()->json($post->load('platforms'));
     }
+
 
     /**
      * Display the specified resource.
@@ -104,24 +111,23 @@ class PostController extends Controller
     {
         $request->validate([
             'status' => 'nullable|string|in:draft,published',
-            'date' => 'nullable|date'
+            'date' => 'nullable|date',
         ]);
 
         $query = Post::where('user_id', Auth::id());
 
-        if ($request->input('status')) {
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        if ($request->input('date')) {
-            $query->where('scheduled_time', $request->date);
+        if ($request->filled('date')) {
+            $query->whereDate('scheduled_time', $request->date);
         }
 
         $posts = $query->latest()->paginate();
 
         return PostResource::collection($posts);
-
-
     }
+
 
 }

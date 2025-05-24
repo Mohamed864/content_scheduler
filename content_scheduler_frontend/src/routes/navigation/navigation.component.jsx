@@ -28,14 +28,17 @@ const Navigation = () => {
         <Fragment>
             <div className="navigation">
                 <Link className="logo-container" to="/">
-                    Home
+                    Dashboard
                 </Link>
                 <div className="nav-links-container">
-                    <Link className="nav-link" to="/">
-                        Home
+                    <Link className="nav-link" to="analytics">
+                        ANALYTICS
                     </Link>
                     <Link className="nav-link" to="/post">
                         POST
+                    </Link>
+                    <Link className="nav-link" to="/settings">
+                        SETTINGS
                     </Link>
                     {currentUser ? (
                         <span className="nav-link" onClick={signOutUser}>

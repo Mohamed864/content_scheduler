@@ -1,0 +1,68 @@
+.settings {
+    padding: 2rem;
+
+    h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+
+    .error {
+        color: red;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+
+    .platform-list {
+        list-style: none;
+        padding: 0;
+
+        li {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .platform-info {
+                display: flex;
+                flex-direction: column;
+
+                .name {
+                    font-weight: bold;
+                    font-size: 1.1rem;
+                }
+
+                .status {
+                    margin-top: 0.25rem;
+                    color: gray;
+
+                    &.enabled {
+                        color: green;
+                    }
+
+                    &.disabled {
+                        color: #999;
+                    }
+                }
+            }
+
+            button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: #0056b3;
+                }
+            }
+        }
+    }
+}
