@@ -4,6 +4,7 @@ import CustomButton from "../custom-button/custom-button.component";
 import { useState } from "react";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { useUserValue } from "../../context/user.context";
 
 const SignInForm = () => {
     const [formFields, setFormFields] = useState({
@@ -13,6 +14,8 @@ const SignInForm = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+
+    const { setCurrentUser, setToken } = useUserValue();
 
     const { email, password } = formFields;
 
@@ -37,10 +40,11 @@ const SignInForm = () => {
             });
 
             // Store token and user data
-            localStorage.setItem("ACCESS_TOKEN", data.data.token);
-            localStorage.setItem("USER", JSON.stringify(data.data.user));
 
-            console.log("Login successful:", data);
+            setCurrentUser(data.data.user);
+            setToken(data.data.token);
+
+            console.log("Login successful:", data.data.user);
             navigate("/"); // Redirect to home after login
         } catch (error) {
             if (error.response?.status === 422) {

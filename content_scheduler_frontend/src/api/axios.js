@@ -8,7 +8,9 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
 
-    const isPublic = ["/login"].some((url) => config.url.includes(url));
+    const isPublic = ["/login", "/register", "/logout"].some((url) =>
+        config.url.includes(url)
+    );
 
     if (!isPublic && token) {
         config.headers = {
@@ -41,6 +43,7 @@ instance.interceptors.response.use(
         if (error.response?.status === 401) {
             localStorage.removeItem("ACCESS_TOKEN");
             localStorage.removeItem("USER");
+            window.location.href = "/auth";
         }
         return Promise.reject(error);
     }

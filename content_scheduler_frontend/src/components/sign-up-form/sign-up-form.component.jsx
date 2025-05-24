@@ -3,6 +3,7 @@ import "./sign-up-form.styles.scss";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import axios from "../../api/axios";
+import { useUserValue } from "../../context/user.context";
 
 const SignUpForm = () => {
     const [formFields, setFormFields] = useState({
@@ -13,6 +14,8 @@ const SignUpForm = () => {
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+
+    const { setUser } = useUserValue();
 
     const { name, email, password, confirmPassword } = formFields;
 
@@ -46,8 +49,7 @@ const SignUpForm = () => {
             });
 
             // Store user data
-            localStorage.setItem("USER", JSON.stringify(data.data.user));
-
+            setUser(data.data.user);
             console.log("Registration successful:", data);
         } catch (error) {
             if (error.response?.status === 422) {
