@@ -1,4 +1,4 @@
-## Scheduler - Full Stack Project
+# Scheduler - Full Stack Project
 
 This is a full-stack project built with Laravel (backend) and React (frontend). It allows users to register, login, create scheduled posts across multiple platforms, and view analytics. The backend is powered by Laravel Sanctum for authentication and job queues for post scheduling. The frontend is implemented using React, React Router, Context API, Axios, and SASS.
 
