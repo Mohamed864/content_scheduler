@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "../../api/axios";
+import logger from "../../utils/Logger";
 
 const Dashboard = () => {
     const [posts, setPosts] = useState([]);
     const [statusFilter, setStatusFilter] = useState("");
     const [dateFilter, setDateFilter] = useState("");
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState(null); // ✅ Add this line
+    const [errors, setErrors] = useState(null);
 
     const fetchPosts = async () => {
         setLoading(true);
-        setErrors(null); // clear previous errors
+        setErrors(null); //clear previous errors
 
         try {
             const response = await axios.get("/posts/filterByStatusAndDate", {
@@ -19,7 +20,7 @@ const Dashboard = () => {
                     date: dateFilter || undefined,
                 },
             });
-
+            logger.log("Fetched posts:", response.data.data);
             setPosts(response.data.data || []);
         } catch (error) {
             console.error("Error fetching posts:", error);

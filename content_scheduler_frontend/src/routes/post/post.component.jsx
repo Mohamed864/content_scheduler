@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import { useUserValue } from "../../context/user.context";
 import "./post.styles.scss";
+import logger from "../../utils/Logger";
 
 const Post = () => {
     const { token } = useUserValue();
@@ -30,8 +31,10 @@ const Post = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                logger.log("Fetched platforms:", response.data);
                 setAvailablePlatforms(response.data);
             } catch (error) {
+                logger.error("Error fetching platforms:", error);
                 console.error("Error fetching platforms:", error);
             }
         };
@@ -132,6 +135,7 @@ const Post = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            logger.log("Post created successfully");
 
             navigate("/dashboard"); // Redirect to posts list
         } catch (error) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
+import logger from "../../utils/Logger";
 
 const Analytics = () => {
     const [analytics, setAnalytics] = useState(null);
@@ -10,6 +11,7 @@ const Analytics = () => {
         const fetchAnalytics = async () => {
             try {
                 const response = await axios.get("/analytics");
+                logger.log("Analytics response:", response.data);
                 setAnalytics(response.data);
             } catch (err) {
                 setError("Error fetching analytics.");

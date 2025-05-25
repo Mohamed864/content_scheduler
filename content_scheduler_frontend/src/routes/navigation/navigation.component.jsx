@@ -4,9 +4,10 @@ import { Fragment } from "react";
 import { useUserValue } from "../../context/user.context";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import logger from "../../utils/Logger";
 
 const Navigation = () => {
-    const { currentUser, token, setCurrentUser, setToken } = useUserValue();
+    const { currentUser, setCurrentUser, setToken } = useUserValue();
     const navigate = useNavigate();
 
     const signOutUser = async (e) => {
@@ -15,7 +16,7 @@ const Navigation = () => {
 
         try {
             await axios.post("/logout", null);
-
+            logger.log("Logout successful");
             setCurrentUser(null);
             setToken(null);
             navigate("/auth");
@@ -28,7 +29,7 @@ const Navigation = () => {
         <Fragment>
             <div className="navigation">
                 <Link className="logo-container" to="/">
-                    Dashboard
+                    DASHBOARD
                 </Link>
                 <div className="nav-links-container">
                     <Link className="nav-link" to="analytics">

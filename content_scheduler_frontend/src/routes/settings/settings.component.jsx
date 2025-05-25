@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
+import logger from "../../utils/Logger";
 import "./settings.styles.scss";
 
 const Settings = () => {
@@ -16,6 +17,7 @@ const Settings = () => {
         setError("");
         try {
             const response = await axios.get("/platforms");
+            logger.log("Fetched Platforms", response.data || []);
             setPlatforms(response.data || []);
         } catch (err) {
             console.error("Failed to fetch platforms", err);
@@ -31,6 +33,7 @@ const Settings = () => {
         setError("");
         try {
             const response = await axios.get("/posts"); // adjust endpoint if needed
+            logger.log("Fetched Posts", response.data.data || []);
             setPosts(response.data.data || []);
         } catch (err) {
             console.error("Failed to fetch posts", err);
@@ -51,10 +54,20 @@ const Settings = () => {
             await axios.post(`/platforms/${platformId}/toggle`, {
                 post_id: selectedPostId,
             });
-            // Refresh platforms list to show updated status
+
+            //logger
+            logger.log(
+                "Toggle Platform",
+                `Toggled platform ID ${platformId} for post ${selectedPostId}`
+            );
+            //refresh platforms list to show updated status
             fetchPlatforms();
             setError("");
         } catch (err) {
+            logger.log(
+                "Toggle Platform Failed",
+                `Platform ID ${platformId}, Post ID ${selectedPostId}, Error: ${err.message}`
+            );
             console.error("Failed to toggle platform", err);
 
             if (err.response?.status === 422 && err.response?.data) {
