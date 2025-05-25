@@ -121,6 +121,10 @@ Accept: 'application/json',
 Authorization: `Bearer ${token}`
 }
 
+# logger class
+
+in order to be aware of all the actions of the users
+
 # Summary
 
 Laravel Sanctum handles secure user authentication.
