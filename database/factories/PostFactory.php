@@ -20,7 +20,7 @@ class PostFactory extends Factory
         ]);
 
         return [
-            'user_id' => User::factory(), // creates a user if none is passed
+            'user_id' => User::factory(), //creates a user if none is passed
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraph,
             'scheduled_time' => $status === Post::STATUS_SCHEDULED
