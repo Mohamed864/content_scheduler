@@ -1,3 +1,23 @@
+# to run the project in backend
+
+git clone link-of-project
+
+cd project-name
+
+composer install
+
+edit .env file
+
+php artisan migrate
+
+php artisan serve
+
+# to run project in frontend
+
+npm install
+
+npm run dev
+
 # Scheduler - Full Stack Project
 
 This is a full-stack project built with Laravel (backend) and React (frontend). It allows users to register, login, create scheduled posts across multiple platforms, and view analytics. The backend is powered by Laravel Sanctum for authentication and job queues for post scheduling. The frontend is implemented using React, React Router, Context API, Axios, and SASS.
@@ -88,3 +108,5 @@ PublishScheduledPosts command dispatches PublishPostJob
 Automatically publishes posts with scheduled_time <= now()
 
 Logs publishing success/failure
+
+use php artisan post:publish to make scheduled posts to be published
